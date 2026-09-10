@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Revive Gen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+/* Revive Gen — polished admin dashboard */
+.admin-page{
+  min-height:100vh;
+  background:#151411;
+  color:var(--text,#eee);
+}
+.admin-wrap{width:min(1180px,calc(100% - 48px));margin:0 auto}
+.admin-header{
+  padding:24px 0;
+  background:#1b1915;
+  border-bottom:1px solid rgba(201,155,61,.22);
+}
+.admin-header-inner{display:flex;justify-content:space-between;align-items:center;gap:20px}
+.admin-brand{display:flex;align-items:center;gap:16px}
+.admin-brand img{
+  width:46px;height:46px;object-fit:contain;
+  border:1px solid rgba(201,155,61,.35);
+}
+.admin-brand strong{display:block;font-family:Manrope,sans-serif;font-size:12px;letter-spacing:.16em;text-transform:uppercase}
+.admin-brand span{display:block;color:#b9b1a2;font-size:10px;margin-top:4px}
+.admin-logout,.admin-refresh{
+  background:#211f1a;
+  border:1px solid rgba(201,155,61,.32);
+  color:#e8dfcf;
+  padding:10px 16px;
+  font:inherit;font-size:10px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;
+  transition:.2s ease;
+}
+.admin-logout:hover,.admin-refresh:hover{
+  background:#29251d;
+  border-color:rgba(201,155,61,.7);
+  color:#f0c873;
+}
+.admin-main{padding:54px 0 90px}
+.admin-kicker{color:#d7ad5b;font-size:10px;letter-spacing:.22em;text-transform:uppercase}
+.admin-title{
+  font-family:Cormorant,serif;font-size:clamp(44px,6vw,72px);
+  font-weight:300;margin:12px 0 38px;color:#f0eadf;
+}
+.admin-title em{color:#d7ad5b;font-weight:400}
+.admin-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:40px}
+.admin-stat{
+  background:#1d1b17;
+  border:1px solid rgba(201,155,61,.2);
+  padding:24px 22px;
+  box-shadow:0 8px 28px rgba(0,0,0,.10);
+}
+.admin-stat span{display:block;color:#aaa193;font-size:9px;letter-spacing:.14em;text-transform:uppercase}
+.admin-stat strong{display:block;font-family:Cormorant,serif;font-size:38px;font-weight:400;margin-top:8px;color:#eee7da}
+.admin-stat:nth-child(2) strong{color:#d7ad5b}
+.admin-toolbar{
+  display:flex;justify-content:space-between;align-items:center;gap:16px;
+  margin-bottom:14px;
+}
+.admin-toolbar h2{font-family:Cormorant,serif;font-size:30px;font-weight:400;margin:0;color:#eee7da}
+.admin-table-wrap{
+  border:1px solid rgba(201,155,61,.2);
+  background:#1b1915;
+  overflow:auto;
+  box-shadow:0 10px 34px rgba(0,0,0,.12);
+}
+.admin-table{width:100%;border-collapse:collapse;min-width:800px}
+.admin-table th{
+  text-align:left;color:#a9a092;font-size:9px;letter-spacing:.13em;text-transform:uppercase;
+  font-weight:500;padding:16px;border-bottom:1px solid rgba(201,155,61,.2);
+  background:#211f1a;
+}
+.admin-table td{
+  padding:17px 16px;
+  border-bottom:1px solid rgba(255,255,255,.055);
+  font-size:12px;vertical-align:middle;color:#e3ddd1;
+}
+.admin-table tbody tr{transition:background .18s ease}
+.admin-table tbody tr:hover{background:#211f1a}
+.admin-table tr:last-child td{border-bottom:0}
+.order-number{color:#d7ad5b;font-size:11px;letter-spacing:.06em}
+.order-customer strong{display:block;font-weight:500;color:#eee7da}
+.order-customer span{display:block;color:#aaa193;font-size:10px;margin-top:4px}
+.status-select{
+  appearance:none;
+  background:#242119;
+  color:#e4ddcf;
+  border:1px solid rgba(201,155,61,.25);
+  padding:8px 26px 8px 10px;
+  font:inherit;font-size:10px;cursor:pointer;
+}
+.status-select:hover{border-color:rgba(201,155,61,.55)}
+.status-select:focus{outline:none;border-color:#d7ad5b}
+.status-select option{background:#242119;color:#eee}
+.view-order{
+  background:none;border:0;color:#d7ad5b;cursor:pointer;
+  font:inherit;font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+}
+.view-order:hover{text-decoration:underline}
+.empty-orders{padding:50px;text-align:center;color:#aaa193;font-size:12px}
+.admin-notice{
+  margin-bottom:22px;
+  background:#211f1a;
+  border:1px solid rgba(201,155,61,.25);
+  padding:14px 17px;color:#bdb4a5;font-size:11px;line-height:1.6;
+}
+.admin-notice.error{border-color:#8a5b5b;color:#e4baba;background:#241b1b}
+.admin-login{
+  min-height:100vh;display:grid;place-items:center;padding:30px;
+  background:radial-gradient(circle at 50% 35%,#252119 0%,#171613 42%,#11110f 100%);
+}
+.login-card{
+  width:min(430px,100%);
+  background:#211f1a;
+  border:1px solid rgba(201,155,61,.28);
+  padding:42px;
+  box-shadow:0 22px 70px rgba(0,0,0,.28);
+}
+.login-logo{display:block;width:65px;height:65px;object-fit:contain;margin:0 auto 26px}
+.login-kicker{text-align:center;color:#d7ad5b;font-size:9px;letter-spacing:.22em;text-transform:uppercase}
+.login-title{text-align:center;font-family:Cormorant,serif;font-size:46px;font-weight:300;margin:10px 0 30px;color:#f0eadf}
+.login-form label{display:block;color:#aaa193;font-size:9px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:22px}
+.login-form input{
+  display:block;width:100%;box-sizing:border-box;margin-top:9px;
+  border:0;border-bottom:1px solid rgba(201,155,61,.55);
+  border-radius:0;background:transparent;color:#eee7da;padding:12px 0;
+  font:inherit;font-size:13px;outline:none;
+}
+.login-form input:focus{border-bottom-color:#d8ae59;box-shadow:0 3px 0 -2px rgba(216,174,89,.85)}
+.login-btn{
+  width:100%;border:1px solid #c6a15b;
+  background:linear-gradient(135deg,#dcb872 0%,#c6a15b 45%,#a97f3f 100%);
+  color:#0a0906;padding:15px;
+  font:inherit;font-size:10px;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;font-weight:600;
+  transition:filter .3s ease, transform .3s ease;
+}
+.login-btn:hover{ filter:brightness(1.1); transform:translateY(-1px); }
+.login-btn:hover{background:#332d22;border-color:#d7ad5b}
+.login-error{margin-top:18px;color:#e8b7b7;font-size:11px;line-height:1.5;text-align:center}
+.modal-backdrop{
+  position:fixed;inset:0;background:rgba(12,11,9,.72);
+  display:grid;place-items:center;padding:20px;z-index:1000;
+}
+.order-modal{
+  width:min(700px,100%);max-height:90vh;overflow:auto;
+  background:#211f1a;border:1px solid rgba(201,155,61,.3);padding:30px;
+  box-shadow:0 24px 80px rgba(0,0,0,.35);
+}
+.modal-head{display:flex;justify-content:space-between;align-items:start;gap:20px;border-bottom:1px solid rgba(201,155,61,.2);padding-bottom:20px;margin-bottom:20px}
+.modal-head h2{font-family:Cormorant,serif;font-size:34px;font-weight:400;margin:0;color:#f0eadf}
+.modal-close{background:none;border:0;color:#aaa193;font-size:24px;cursor:pointer}
+.modal-close:hover{color:#d7ad5b}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:24px}
+.detail-box{border-bottom:1px solid rgba(201,155,61,.3);padding-bottom:12px}
+.detail-box span{display:block;color:#aaa193;font-size:9px;letter-spacing:.12em;text-transform:uppercase}
+.detail-box strong{display:block;font-size:12px;font-weight:400;margin-top:7px;white-space:pre-line;color:#e4ddcf}
+.detail-items{border-top:1px solid rgba(201,155,61,.2);margin-top:8px}
+.detail-item{display:flex;justify-content:space-between;gap:20px;padding:15px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:12px;color:#e4ddcf}
+.modal-total{display:flex;justify-content:space-between;padding-top:20px;font-family:Cormorant,serif;font-size:24px;color:#eee7da}
+.modal-total strong{color:#d7ad5b}
+[hidden]{display:none !important}
+@media(max-width:700px){
+  .admin-wrap{width:min(100% - 28px,1180px)}
+  .admin-stats{grid-template-columns:1fr}
+  .admin-header-inner{align-items:flex-start}
+  .detail-grid{grid-template-columns:1fr}
+  .login-card{padding:30px 24px}
+}
+</style>
+
+<style id="admin-hidden-fix">
+[hidden] { display: none !important; }
+</style>
+</head>
+<body class="admin-page">
+
+<section id="loginView" class="admin-login">
+  <div class="login-card">
+    <img src="images/logo.jpg" alt="Revive Gen" class="login-logo">
+    <div class="login-kicker">Private Area</div>
+    <h1 class="login-title">Admin <em>Access.</em></h1>
+    <form id="loginForm" class="login-form">
+      <label>Email
+        <input id="adminEmail" type="email" autocomplete="username" required>
+      </label>
+      <label>Password
+        <input id="adminPassword" type="password" autocomplete="current-password" required>
+      </label>
+      <button class="login-btn" type="submit" id="loginBtn">Sign In</button>
+      <div id="loginError" class="login-error" hidden></div>
+    </form>
+  </div>
+</section>
+
+<section id="dashboardView" hidden>
+  <header class="admin-header">
+    <div class="admin-wrap admin-header-inner">
+      <div class="admin-brand">
+        <img src="images/logo.jpg" alt="Revive Gen">
+        <div><strong>Revive Gen</strong><span>Order Management</span></div>
+      </div>
+      <button id="logoutBtn" class="admin-logout">Sign Out</button>
+    </div>
+  </header>
+
+  <main class="admin-main">
+    <div class="admin-wrap">
+      <div class="admin-kicker">Private Dashboard</div>
+      <h1 class="admin-title">Your <em>Orders.</em></h1>
+
+      <div id="adminNotice" class="admin-notice" hidden></div>
+
+      <section class="admin-stats">
+        <div class="admin-stat"><span>Total Orders</span><strong id="statOrders">—</strong></div>
+        <div class="admin-stat"><span>Pending</span><strong id="statPending">—</strong></div>
+        <div class="admin-stat"><span>Order Value</span><strong id="statRevenue">—</strong></div>
+      </section>
+
+      <div class="admin-toolbar">
+        <h2>Recent Orders</h2>
+        <button id="refreshBtn" class="admin-refresh">Refresh</button>
+      </div>
+
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Order</th><th>Customer</th><th>City</th><th>Total</th><th>Status</th><th></th>
+            </tr>
+          </thead>
+          <tbody id="ordersBody"></tbody>
+        </table>
+        <div id="emptyOrders" class="empty-orders" hidden>No orders yet.</div>
+      </div>
+    </div>
+  </main>
+</section>
+
+<div id="orderModalBackdrop" class="modal-backdrop" hidden>
+  <div class="order-modal">
+    <div class="modal-head">
+      <div><div class="admin-kicker">Order Details</div><h2 id="modalOrderNumber">Order</h2></div>
+      <button class="modal-close" id="modalClose" aria-label="Close">×</button>
+    </div>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<script src="js/admin.js"></script>
+</body>
+</html>
